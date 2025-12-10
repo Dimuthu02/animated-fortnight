@@ -217,9 +217,12 @@ function initParticlesCanvas() {
             }
         }
         
-        // Draw connections
+        // Draw connections (optimized - limit connections per particle)
         for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
+            let connectionCount = 0;
+            const maxConnections = 3; // Limit connections per particle for better performance
+            
+            for (let j = i + 1; j < particles.length && connectionCount < maxConnections; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -231,6 +234,7 @@ function initParticlesCanvas() {
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
                     ctx.stroke();
+                    connectionCount++;
                 }
             }
         }
@@ -365,6 +369,4 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Console message
-console.log('%c🎨 Animated Fortnight 🎨', 'font-size: 24px; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 20px; border-radius: 5px;');
-console.log('%cA vibrant two-week creative showcase featuring smooth animations, interactive visuals, and dynamic storytelling.', 'font-size: 14px; color: #667eea; padding: 5px;');
+

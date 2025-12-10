@@ -128,6 +128,12 @@ function initParticlesCanvas() {
     let mouseX = 0;
     let mouseY = 0;
     
+    // Configuration constants
+    const INITIAL_PARTICLE_COUNT = 100;
+    const MAX_PARTICLE_COUNT = 200;
+    const PARTICLES_PER_MOUSE_MOVE = 3;
+    const MAX_CONNECTIONS_PER_PARTICLE = 3;
+    
     // Set canvas size
     function resizeCanvas() {
         canvas.width = canvas.offsetWidth;
@@ -180,7 +186,7 @@ function initParticlesCanvas() {
     
     // Create initial particles
     function createParticles() {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < INITIAL_PARTICLE_COUNT; i++) {
             particles.push(new Particle(
                 Math.random() * canvas.width,
                 Math.random() * canvas.height
@@ -196,7 +202,7 @@ function initParticlesCanvas() {
         mouseY = e.clientY - rect.top;
         
         // Add particles at mouse position
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < PARTICLES_PER_MOUSE_MOVE; i++) {
             particles.push(new Particle(mouseX, mouseY));
         }
     });
@@ -220,9 +226,8 @@ function initParticlesCanvas() {
         // Draw connections (optimized - limit connections per particle)
         for (let i = 0; i < particles.length; i++) {
             let connectionCount = 0;
-            const maxConnections = 3; // Limit connections per particle for better performance
             
-            for (let j = i + 1; j < particles.length && connectionCount < maxConnections; j++) {
+            for (let j = i + 1; j < particles.length && connectionCount < MAX_CONNECTIONS_PER_PARTICLE; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -240,8 +245,8 @@ function initParticlesCanvas() {
         }
         
         // Keep particle count reasonable
-        if (particles.length > 200) {
-            particles = particles.slice(-200);
+        if (particles.length > MAX_PARTICLE_COUNT) {
+            particles = particles.slice(-MAX_PARTICLE_COUNT);
         }
         
         requestAnimationFrame(animate);

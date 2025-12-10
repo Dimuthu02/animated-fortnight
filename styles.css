@@ -207,6 +207,7 @@ body {
     border-radius: 50%;
     filter: blur(40px);
     animation: float 20s infinite ease-in-out;
+    will-change: transform;
 }
 
 .shape-1 {
